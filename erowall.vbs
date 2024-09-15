@@ -7,7 +7,7 @@ searchstring=""
 
 '=== part 1 ====
 sUrlRequest = "https://erowall.com"
-Set oXMLHTTP = CreateObject("MSXML2.XMLHTTP")
+Set oXMLHTTP = CreateObject("WinHttp.WinHttpRequest.5.1")
 oXMLHTTP.Open "GET", sUrlRequest, False
 oXMLHTTP.Send
 httpfile=oXMLHTTP.Responsetext
@@ -22,7 +22,7 @@ r = int(rnd*CLng(lnk)) + 1
 
 '=== part 2 ====
 url="https://erowall.com/wallpapers/original/" + cstr(r) + ".jpg"
-Set oXMLHTTP2 = CreateObject("MSXML2.XMLHTTP")
+Set oXMLHTTP2 = CreateObject("WinHttp.WinHttpRequest.5.1")
 oXMLHTTP2.Open "GET", url, False
 oXMLHTTP2.Send
 Set oADOStream = CreateObject("ADODB.Stream")
@@ -38,9 +38,14 @@ Set objWshShell = WScript.CreateObject("Wscript.Shell")
 'objWshShell.RegWrite "HKEY_CURRENT_USER\Control Panel\Desktop\Wallpaper", erowallfile, "REG_SZ"
 'objWshShell.RegWrite "HKCU\Control Panel\Desktop\WallpaperStyle", "6", "REG_SZ"
 'objWshShell.Run "%windir%\System32\RUNDLL32.EXE user32.dll,UpdatePerUserSystemParameters", 1, False
+Set objFile = FSO.GetFile(erowallfile)
+Set objShellApp = CreateObject("Shell.Application")
+Set objFolder = objShellApp.Namespace(FSO.GetParentFolderName(objFile))
+objFolder.ParseName(FSO.GetFileName(objFile)).InvokeVerb "setdesktopwallpaper"
+
 
 'use irfanview if you want
-objWshShell.Run "c:\Programs\IrfanView\i_view64.exe """ & erowallfile & """ /wall=3 /killmesoftly", 1, False 
+'objWshShell.Run "c:\Programs\IrfanView\i_view64.exe """ & erowallfile & """ /wall=3 /killmesoftly", 1, False 
 
 
 Set oXMLHTTP2 = Nothing
