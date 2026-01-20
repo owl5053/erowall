@@ -25,6 +25,7 @@ if [ "$XDG_CURRENT_DESKTOP" = "XFCE" ]
     xres=$(echo $(xfconf-query --channel xfce4-desktop --list | grep last-image))
     for x in "${xres[@]}"
     do
+	  xfconf-query --channel xfce4-desktop --property $x --set "" #refresh desktop if the same name
       xfconf-query --channel xfce4-desktop --property $x --set $pathimg
     done
   # Set the wallpaper for unity, gnome3, cinnamon.
